@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h1 th:text="'Welcome, ' + ${user.name}">Welcome</h1>
+
+
+    <!-- Optional message -->
+    <p th:text="${message}"></p>
+    <p>You have <span th:text="${#lists.size(todos)}"></span> Todos</p>
+    <a th:href="@{/todos}">You can check your todos here</a>
+</div>
+</body>
+</html>

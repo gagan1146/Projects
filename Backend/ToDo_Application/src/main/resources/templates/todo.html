@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo</title>
+    <link rel="stylesheet" th:href="@{/css/todoStyle.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Your Todos</h1>
+
+    <form th:action="@{/todos/add}" method="post">
+        <input type="text" name="description" placeholder="Enter todo" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <ul>
+        <li th:each="todo : ${todos}">
+            <span class="description" th:text="${todo.description}"
+                  th:classappend="${todo.completed} ? 'completed' : ''"></span>
+
+            <form th:action="@{/todos/toggle/{id}(id=${todo.id})}" method="post" style="display:inline">
+                <button type="submit">Toggle</button>
+            </form>
+
+            <form th:action="@{/todos/delete/{id}(id=${todo.id})}" method="post" style="display:inline">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
