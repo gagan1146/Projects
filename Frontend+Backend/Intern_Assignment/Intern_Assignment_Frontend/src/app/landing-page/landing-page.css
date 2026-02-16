@@ -1,0 +1,25 @@
+.main{
+    display: flex;
+    justify-content: space-between;
+}
+
+.right-left,.right-right{
+    height: 100px;
+    width: 100px;
+    transition: background-color 0.5s ease;
+    background-color: rgb(110, 184, 205); transition: background-color 0.4s ease-in-out;
+    padding: 30px;
+    border-radius: 28px;
+    margin-top: 90px;
+    margin-right: 70px;
+}
+
+.right-left:hover,.right-right:hover{
+    background-color: rgb(122, 199, 130); transition: background-color 0.4s ease-in-out;
+}
+
+
+a{
+    color: #1a1a1a;;
+    text-decoration: none;
+}

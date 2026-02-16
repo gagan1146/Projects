@@ -1,0 +1,22 @@
+<h1>Shelf Summary Page</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let header of tableHeaders">{{ header }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let shelf of shelves">
+      <td>{{ shelf.id }}</td>
+      <td>{{ shelf.shelfName }}</td>
+      <td>{{ shelf.partNumber }}</td>
+      <td>{{ shelf.buildingName }}</td>
+      <td>{{ shelf.numberOfSlots }}</td>
+      <td>
+        <button (click)="updateShelf(shelf.id)">Update</button>
+        <button (click)="deleteShelf(shelf.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,27 @@
+<nav>
+  <div class="left">
+    <h3 *ngFor="let item of headerSectionLeft">{{ item.name }}</h3>
+  </div>
+
+  <div class="mid">
+    <a *ngFor="let val of headerSectionMiddle" [routerLink]="val.path">
+      {{ val.name }}
+    </a>
+  </div>
+
+  <div class="right">
+    <img src="UserLogo.png" alt="UserLogo" (click)="toggleDropdown()" />
+    <div class="dropdown" *ngIf="dropdownOpen">
+      <ng-container *ngIf="isLoggedIn; else guestMenu">
+        <a *ngFor="let item of headerSectionRightLoggedIn" (click)="item.action()">
+          {{ item.name }}
+        </a>
+      </ng-container>
+      <ng-template #guestMenu>
+        <a *ngFor="let item of headerSectionRightGuest" (click)="item.action()">
+          {{ item.name }}
+        </a>
+      </ng-template>
+    </div>
+  </div>
+</nav>

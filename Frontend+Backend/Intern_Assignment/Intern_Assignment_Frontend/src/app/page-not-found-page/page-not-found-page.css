@@ -1,0 +1,16 @@
+.content{
+    display: flex;
+    margin: auto;
+    color: white;
+    font-size: 40px;
+    background-color: rgb(24, 124, 132);
+    height: 290px;
+    padding-top: 290px;
+    margin-top: 10px;
+    padding-left: 500px;
+}
+
+a{
+    background-color: rgb(163, 190, 214);
+    padding: 5px;
+}

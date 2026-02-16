@@ -1,0 +1,14 @@
+<div class="form-container">
+  <h2>Signup</h2>
+  <form (ngSubmit)="onSignup()">
+    <input
+      *ngFor="let field of signupFields"
+      [type]="field.type"
+      [name]="field.name"
+      [placeholder]="field.placeholder"
+      [(ngModel)]="field.value"
+      required
+    />
+    <button type="submit">Signup</button>
+  </form>
+</div>
