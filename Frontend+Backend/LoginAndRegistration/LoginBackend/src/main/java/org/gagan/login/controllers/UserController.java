@@ -5,6 +5,8 @@ import org.gagan.login.repository.UserRepository;
 import org.gagan.login.requests.LoginRequest;
 import org.gagan.login.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,12 +21,14 @@ public class UserController {
         this.userService = userService;
         this.userRepository = userRepository;
     }
-    @PostMapping("/adduser")
+    @PostMapping("/register")
+    @CrossOrigin("http://localhost:4200")
     public User saveUser(@RequestBody User user){
         return userService.saveUser(user);
     }
-    @PostMapping("/loginUser")
-    public Boolean login(@RequestBody LoginRequest loginRequest){
+    @PostMapping("/login")
+    @CrossOrigin("http://localhost:4200")
+    public ResponseEntity<User> login(@RequestBody LoginRequest loginRequest){
         return userService.loginUser(loginRequest);
     }
 }
