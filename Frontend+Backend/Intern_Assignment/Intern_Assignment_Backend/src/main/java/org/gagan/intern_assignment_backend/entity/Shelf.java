@@ -15,11 +15,7 @@ import java.util.UUID;
 @Data
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
 public class Shelf {
-    @GeneratedValue
     private UUID shelfId;
     private String shelfName;
     private String partName;

@@ -9,4 +9,5 @@ public class InternAssignmentBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(InternAssignmentBackendApplication.class, args);
     }
+
 }
