@@ -1,23 +1,17 @@
-package org.gagan.routematic_clone.model;
+package org.gagan.routematic_clone.dto.signupDTO;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import org.springframework.data.neo4j.core.schema.Id;
-import org.springframework.data.neo4j.core.schema.Node;
-import java.util.UUID;
 
-@Getter
+@Data
 @Setter
-@Node
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue
-    private UUID id;
+public class UserSignupResponse {
     private String username;
     private String email;
     private String password;
