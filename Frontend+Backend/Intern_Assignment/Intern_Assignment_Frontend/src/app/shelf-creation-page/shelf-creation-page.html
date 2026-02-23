@@ -1,6 +1,6 @@
 <h1>Shelf Creation Page</h1>
-<form (ngSubmit)="fxnCalled()">
-  <input type="text" placeholder="Shelf Name" [(ngModel)]="device.deviceName" name="deviceName" required>
-  <input type="text" placeholder="Part Number" [(ngModel)]="device.partNumber" name="partNumber" required>
-  <input type="submit" value="Add a Device">
+<form (ngSubmit)="createShelf()">
+  <input type="text" placeholder="Shelf Name" [(ngModel)]="shelf.shelfName" name="shelfName" required>
+  <input type="text" placeholder="Part Number" [(ngModel)]="shelf.partNumber" name="partNumber" required>
+  <input type="submit" value="Create a Shelf">
 </form>

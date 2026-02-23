@@ -1,0 +1,24 @@
+<!-- <select>
+  <option *ngFor="let data of dataForDropDown; trackBy: trackByShelfPositionId"
+          [value]="data.shelfPositionId"
+          [ngStyle]=" data.flag ?   'red-option' : 'green-option'">
+    {{ data.shelfPositionId }} - 
+    <ng-container *ngIf="data.shelfName; else addButton">
+      {{ data.shelfName }}
+    </ng-container>
+    <ng-template #addButton>
+      Add
+    </ng-template>
+  </option>
+</select> -->
+
+
+<div *ngFor="let data of dataForDropDown; trackBy: trackByShelfPositionId">
+  <div class="align-item-div">
+    <span>{{ data.shelfPositionId }}</span>
+    <span *ngIf="data.shelfName; else addButton"> {{ data.shelfName }} </span>
+    <ng-template #addButton>
+      <a [routerLink]="['/shelf/creation',id,data.shelfPositionId]">Add</a>
+    </ng-template>
+  </div>
+</div>

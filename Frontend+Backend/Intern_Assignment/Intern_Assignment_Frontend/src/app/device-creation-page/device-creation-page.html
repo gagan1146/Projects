@@ -1,9 +1,9 @@
 <h1>Device Creation Page</h1>
-<form (ngSubmit)="fxnCalled()">
+<form (ngSubmit)="createDevice()">
   <input type="text" placeholder="Device Name" [(ngModel)]="device.deviceName" name="deviceName" required>
   <input type="text" placeholder="Part Number" [(ngModel)]="device.partNumber" name="partNumber" required>
   <input type="text" placeholder="Building Name" [(ngModel)]="device.buildingName" name="buildingName" required>
   <input type="text" placeholder="Device Type" [(ngModel)]="device.deviceType" name="deviceType" required>
-  <input type="text" placeholder="Number of Shelf Positions" [(ngModel)]="device.numberOfShelf" name="numberOfShelf" required>
+  <input type="number" placeholder="Number of Shelf Positions" [(ngModel)]="device.numberOfShelfPositions" name="numberOfShelfPositions" required>
   <input type="submit" value="Add a Device">
 </form>

@@ -1,74 +1,64 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnChanges, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface ShelfModel {
-  id: string;
-  shelfName: string;
-  partNumber: number;
-  buildingName: string;
-  numberOfSlots: number;
-}
+import { RouterModule } from '@angular/router';
+import { ShelfService } from '../service/shelf-service';
+import { ShelfModel } from '../models/ShelfModel';
+import { ShelfWithDeviceAndShelfPosition } from '../models/ShelfWithDeviceAndShelfPosition';
 
 @Component({
   selector: 'app-shelf-summary-page',
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule,RouterModule],
   templateUrl: './shelf-summary-page.html',
   styleUrl: './shelf-summary-page.css',
   standalone: true,
 })
-export class ShelfSummaryPage {
-  shelves: ShelfModel[] = [
-    {
-      id: 'S001',
-      shelfName: 'Shelf Alpha',
-      partNumber: 7001,
-      buildingName: 'Main HQ',
-      numberOfSlots: 10,
-    },
-    {
-      id: 'S002',
-      shelfName: 'Shelf Beta',
-      partNumber: 7002,
-      buildingName: 'Data Center A',
-      numberOfSlots: 8,
-    },
-    {
-      id: 'S003',
-      shelfName: 'Shelf Gamma',
-      partNumber: 7003,
-      buildingName: 'Office Tower',
-      numberOfSlots: 12,
-    },
-  ];
+export class ShelfSummaryPage implements OnInit,OnChanges {
   tableHeaders: string[] = [
-    'ID',
+    'SHELF ID',
     'Shelf Name',
     'Part Number',
-    'Building Name',
-    'Number of Slots',
+    'Shelf Position',
+    'Device Name',
     'Actions',
   ];
-  newShelf: ShelfModel = {
-    id: '',
-    shelfName: '',
-    partNumber: 0,
-    buildingName: '',
-    numberOfSlots: 0,
-  };
-  fxnCalled() {
-    const newId = 'S' + (this.shelves.length + 1).toString().padStart(3, '0');
-    this.shelves.push({ ...this.newShelf, id: newId });
-    this.newShelf = { id: '', shelfName: '', partNumber: 0, buildingName: '', numberOfSlots: 0 };
-    alert('Shelf added successfully!');
+  shelves: ShelfWithDeviceAndShelfPosition[] = [];
+  constructor(private shelfService: ShelfService, private cdRef: ChangeDetectorRef) {}
+  ngOnInit(): void {
+    this.loadShelves();
   }
-  deleteShelf(id: string | undefined) {
-    this.shelves = this.shelves.filter((s) => s.id !== id);
+  ngOnChanges(changes: SimpleChanges): void {
+    this.cdRef.detectChanges();
   }
-  updateShelf(id: string | undefined) {
-    const shelf = this.shelves.find((s) => s.id === id);
-    if (shelf) {
-      shelf.shelfName = shelf.shelfName + ' (Updated)';
-    }
+  
+  loadShelves(){
+    this.shelfService.getAllShelves().subscribe({
+      next: (data) => {
+        this.shelves = data;
+        console.log('Shelves loaded in summary page:', data);
+        this.cdRef.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load shelves', err);
+      }
+    });
   }
+  deleteShelfById(id:string){
+    this.shelfService.deleteShelfById(id).subscribe({
+      next:
+      (data)=>{
+        console.log(data);
+      },
+      error:
+      (error)=>{
+        console.log(error);
+        
+      }
+    })
+  }
+  updateShelf(shelfId: string | undefined) {
+  }
+  trackByShelfId(index: number, item: ShelfWithDeviceAndShelfPosition): string {
+  return item.shelfId;
+}
 }

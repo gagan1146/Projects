@@ -11,8 +11,6 @@ import org.springframework.data.neo4j.core.schema.Node;
 @Data
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
     String username;
     String email;

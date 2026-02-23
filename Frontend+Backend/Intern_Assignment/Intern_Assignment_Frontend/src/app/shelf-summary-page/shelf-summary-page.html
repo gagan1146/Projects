@@ -1,5 +1,3 @@
-<h1>Shelf Summary Page</h1>
-
 <table>
   <thead>
     <tr>
@@ -7,15 +5,15 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let shelf of shelves">
-      <td>{{ shelf.id }}</td>
+    <tr *ngFor="let shelf of shelves; trackBy: trackByShelfId">
+      <td>{{ shelf.shelfId }}</td>
       <td>{{ shelf.shelfName }}</td>
       <td>{{ shelf.partNumber }}</td>
-      <td>{{ shelf.buildingName }}</td>
-      <td>{{ shelf.numberOfSlots }}</td>
+      <td>{{ shelf.shelfPositionId }}</td>
+      <td>{{ shelf.deviceName }}</td>
       <td>
-        <button (click)="updateShelf(shelf.id)">Update</button>
-        <button (click)="deleteShelf(shelf.id)">Delete</button>
+        <a [routerLink]='["/shelf/updation/",shelf.shelfId]'>Update</a>
+        <button (click)="deleteShelfById(shelf.shelfId)">Delete</button>
       </td>
     </tr>
   </tbody>

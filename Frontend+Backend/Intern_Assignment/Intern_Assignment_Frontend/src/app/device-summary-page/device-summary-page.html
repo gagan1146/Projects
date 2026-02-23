@@ -6,16 +6,20 @@
   </thead>
   <tbody>
     <tr *ngFor="let device of devices">
-      <td>{{ device.id }}</td>
+      <td>{{ device.deviceId }}</td>
       <td>{{ device.deviceName }}</td>
       <td>{{ device.partNumber }}</td>
-      <td>{{ device.BuildingName }}</td>
-      <td>{{ device.DeviceType }}</td>
-      <td>{{ device.numberOfShelf }}</td>
+      <td>{{ device.buildingName }}</td>
+      <td>{{ device.deviceType }}</td>
+      <td>{{ device.numberOfShelfPositions }}</td>
       <td>
-        <button (click)="updateDevice(device.id)">Update</button>
-        <button (click)="deleteDevice(device.id)">Delete</button>
+        <a [routerLink]="['/device/summary/device/', device.deviceId]">Update</a>
+        <button (click)="deleteDevice(device.deviceId)">Delete</button>
       </td>
+    </tr>
+
+    <tr *ngIf="devices.length === 0">
+      <td colspan="7" style="text-align:center;">No devices found</td>
     </tr>
   </tbody>
 </table>

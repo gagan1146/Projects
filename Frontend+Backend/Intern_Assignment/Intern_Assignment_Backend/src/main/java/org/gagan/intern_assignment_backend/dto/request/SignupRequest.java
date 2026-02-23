@@ -7,12 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.neo4j.core.schema.Node;
 
-@Node
-@Data
+//@Node
+//@Data
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class SignupRequest {
     String username;
     String password;

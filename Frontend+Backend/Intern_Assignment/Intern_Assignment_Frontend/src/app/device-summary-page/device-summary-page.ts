@@ -1,24 +1,19 @@
-import { Component } from '@angular/core';
-import { DeviceModel } from '../models/DeviceModel';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef, SimpleChanges, OnChanges } from "@angular/core";
+import { DeviceModel } from "../models/DeviceModel";
+import { DeviceService } from "../service/device-service";
+import { RouterModule } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
 @Component({
   selector: 'app-device-summary-page',
-  templateUrl: './device-summary-page.html',
+  templateUrl:'./device-summary-page.html',
   styleUrls: ['./device-summary-page.css'],
-  standalone: true, 
-  imports: [CommonModule, RouterModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
 })
-export class DeviceSummaryPage {
-  devices: DeviceModel[] = [
-    { id: 'D001', deviceName: 'Core Router', partNumber: 1001, BuildingName: 'Main HQ', DeviceType: 'Networking', numberOfShelf: 4 },
-    { id: 'D002', deviceName: 'Edge Switch', partNumber: 2002, BuildingName: 'Data Center A', DeviceType: 'Switching', numberOfShelf: 2 },
-    { id: 'D003', deviceName: 'Firewall Appliance', partNumber: 3003, BuildingName: 'Security Block', DeviceType: 'Security', numberOfShelf: 1 },
-    { id: 'D004', deviceName: 'Storage Server', partNumber: 4004, BuildingName: 'Data Center B', DeviceType: 'Storage', numberOfShelf: 6 },
-    { id: 'D005', deviceName: 'Wireless Controller', partNumber: 5005, BuildingName: 'Office Tower', DeviceType: 'Wireless', numberOfShelf: 3 }
-  ];
-
+export class DeviceSummaryPage implements OnInit, OnChanges {
+  devices: DeviceModel[] = [];
   tableHeaders: string[] = [
     'ID',
     'Device Name',
@@ -26,17 +21,42 @@ export class DeviceSummaryPage {
     'Building Name',
     'Device Type',
     'Number of Shelf Positions',
-    'Actions'
+    'Actions',
   ];
 
-  deleteDevice(id: string | undefined) {
-    this.devices = this.devices.filter(d => d.id !== id);
+  constructor(private deviceService: DeviceService, private cdRef: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.loadDevices();
   }
 
-  updateDevice(id: string | undefined) {
-    const device = this.devices.find(d => d.id === id);
-    if (device) {
-      device.deviceName = device.deviceName + ' (Updated)';
-    }
+  ngOnChanges(changes: SimpleChanges): void {
+    this.cdRef.detectChanges();
+  }
+
+  loadDevices(): void {
+    this.deviceService.getAllDevices().subscribe({
+      next: (data) => {
+        this.devices = data;
+        console.log('Devices loaded in summary page:', data);
+        this.cdRef.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to load devices', err);
+      }
+    });
+  }
+
+  deleteDevice(id: string): void {
+    this.deviceService.deleteDevice(id).subscribe({
+      next: () => {
+        this.devices = this.devices.filter(d => d.deviceId !== id);
+        console.log(`Device ${id} deleted`);
+        this.cdRef.detectChanges();
+      },
+      error: (err) => {
+        console.error(`Failed to delete device ${id}`, err);
+      }
+    });
   }
 }

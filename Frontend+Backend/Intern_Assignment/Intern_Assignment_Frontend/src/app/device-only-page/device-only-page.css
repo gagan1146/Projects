@@ -1,0 +1,68 @@
+/* General page styling */
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Main container */
+.main {
+  width: 60%;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Input fields */
+input[type="text"],
+input[type="number"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* Submit button */
+input[type="submit"] {
+  background: #3498db;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+input[type="submit"]:hover {
+  background: #2980b9;
+}
+
+/* Shelves section */
+.main h1 {
+  margin-top: 30px;
+  font-size: 20px;
+  color: #34495e;
+}
+
+app-add-shelves-to-device {
+  display: block;
+  margin-top: 15px;
+}

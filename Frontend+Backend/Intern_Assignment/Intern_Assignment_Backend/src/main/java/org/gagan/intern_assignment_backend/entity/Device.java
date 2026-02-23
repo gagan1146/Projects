@@ -18,14 +18,10 @@ import java.util.UUID;
 @Data
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
 public class Device {
     @Id
     @GeneratedValue(generatorClass = UUIDGenerator.class)
     private UUID deviceId;
-
     private String deviceName;
     private String partNumber;
     private String buildingName;

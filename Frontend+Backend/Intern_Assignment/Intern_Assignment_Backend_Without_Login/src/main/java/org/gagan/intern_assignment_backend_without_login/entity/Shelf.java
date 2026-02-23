@@ -1,0 +1,20 @@
+package org.gagan.intern_assignment_backend_without_login.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.UUID;
+
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+public class Shelf {
+    private UUID shelfId;
+    private String shelfName;
+    private String partNumber;
+    private Boolean flag;
+
+}

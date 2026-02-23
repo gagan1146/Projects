@@ -1,5 +1,6 @@
 export interface ShelfModel{
-    id?:string
+    shelfId:string
     shelfName:string
-    partNumber:number
+    partNumber:string,
+    flag:Boolean
 }

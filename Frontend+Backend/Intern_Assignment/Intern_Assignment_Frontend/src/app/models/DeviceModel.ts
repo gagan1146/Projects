@@ -1,8 +1,9 @@
 export interface DeviceModel{
-    id?:string
+    deviceId:string
     deviceName: string
-    partNumber:number
-    BuildingName:string
-    DeviceType:string
-    numberOfShelf:number
+    partNumber:string
+    buildingName:string
+    deviceType:string
+    numberOfShelfPositions:number
+    flag:boolean
 }

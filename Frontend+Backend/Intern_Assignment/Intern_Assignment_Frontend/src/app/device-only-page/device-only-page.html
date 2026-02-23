@@ -1,0 +1,19 @@
+<h1>Device Updation Page</h1>
+<div class="main">
+
+  <form (ngSubmit)="fxnCalled()">
+    <div *ngIf="device">
+      <input type="text" placeholder="Device Name" [(ngModel)]="device.deviceName" name="deviceName" required>
+      <input type="text" placeholder="Part Number" [(ngModel)]="device.partNumber" name="partNumber" required>
+      <input type="text" placeholder="Building Name" [(ngModel)]="device.buildingName" name="buildingName" required>
+      <input type="text" placeholder="Device Type" [(ngModel)]="device.deviceType" name="deviceType" required>
+      <p>Number of Shelf Positions :- {{device.numberOfShelfPositions}}</p>
+      <input type="submit" value="Update a Device">
+    </div>
+  </form>
+  </div>
+
+<div class="main" *ngIf="device">
+  <h1>Want to Add Shelves</h1>
+  <app-add-shelves-to-device [id]="device.deviceId"></app-add-shelves-to-device>
+</div>

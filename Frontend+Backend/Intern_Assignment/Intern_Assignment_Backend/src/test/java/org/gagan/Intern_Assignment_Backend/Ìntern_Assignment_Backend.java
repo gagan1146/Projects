@@ -1,4 +1,4 @@
-package org.gagan.intern_assignment_backend;
+package org.gagan.Intern_Assignment_Backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

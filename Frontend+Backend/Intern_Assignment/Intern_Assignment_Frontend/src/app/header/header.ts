@@ -25,10 +25,9 @@ export class HeaderComponent {
   ];
 
   headerSectionMiddle: Section[] = [
-    { path: '/home', name: 'Home' },
+    { path: '', name: 'Home' },
     { path: '/device/creation', name: 'Device Creation' },
     { path: '/device/summary', name: 'Device Summary' },
-    { path: '/shelf/creation', name: 'Shelf Creation' },
     { path: '/shelf/summary', name: 'Shelf Summary' },
   ];
 

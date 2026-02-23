@@ -13,11 +13,11 @@ export interface User {
 export class User {
   private user: UserModel | null = null; 
   signup(user: UserModel) {
-    const res = user; // getting response from backend
+    const res = user;
     this.user = user; 
   } 
   login(email: string, password: string): boolean { 
-    if (true) {  // getting response from backend here
+    if (true) {  
       return true; 
     } 
     return false; 

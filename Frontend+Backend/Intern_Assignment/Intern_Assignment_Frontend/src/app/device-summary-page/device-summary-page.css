@@ -52,3 +52,14 @@ button:hover {
 table{
   margin-top: 80px;
 }
+
+a{
+  display: flex;
+  margin: 13px 5px;
+  padding: 6px 6px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: rgb(64, 206, 64);
+  text-decoration: none;
+}
