@@ -40,7 +40,7 @@ public class ShelfPositionService {
                         r.get("shelfName").isNull() ? null : r.get("shelfName").asString()
                 ))
                 .toList();
-
+        log.info("Shelf Position : {}", deviceId);
         return ResponseEntity.ok(shelves);
     }
 }

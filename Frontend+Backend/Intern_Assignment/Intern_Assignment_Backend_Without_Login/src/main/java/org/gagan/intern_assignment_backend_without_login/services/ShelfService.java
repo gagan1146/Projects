@@ -24,7 +24,7 @@ public class ShelfService {
         var query = """
                 CREATE (s:Shelf { shelfId: randomUUID(), shelfName: $shelfName, partNumber: $partNumber, flag:true })
                 WITH s
-                MATCH (n:Device { deviceId : $deviceId })-[:HAS]->(sp:ShelfPositions { shelfPositionId : $shelfPositionId })
+                MATCH (n:Device { deviceId : $deviceId })-[:HAS]->(sp:ShelfPositions { shelfPositionId : $shelfPositionId, flag : FALSE })
                 SET sp.flag = TRUE
                 CREATE (sp)-[:HAS]->(s)
                 RETURN s
@@ -38,12 +38,8 @@ public class ShelfService {
                         .withDatabase("neo4j")
                         .build())
                 .execute();
-        var shelf1 = result.records().stream().map(r -> {
-            var node = r.get("s").asNode();
-            return new Shelf(UUID.fromString(node.get("shelfId").asString()), node.get("shelfName").asString(), node.get("partNumber").asString(), node.get("flag").asBoolean());
-        }).findFirst().orElse(null);
-        System.out.println(shelf1);
-        return ResponseEntity.ok(shelf1);
+        log.info("Shelf created: {}", shelf);
+        return ResponseEntity.ok(shelf);
     }
 
      public ResponseEntity<Shelf> updateShelf(UUID shelfId, Shelf shelf) {
@@ -134,9 +130,11 @@ public class ShelfService {
 
     public ResponseEntity<Shelf> deleteShelfById(UUID id) {
         String query = """
-                MATCH (s:Shelf { shelfId: $id })
-                SET s.flag = false
-                RETURN s
+                MATCH (d:Device {flag:TRUE})-[:HAS]->(sp:ShelfPositions)
+                OPTIONAL MATCH (sp)-[r1:HAS]->(s:Shelf {shelfId:$id})
+                SET sp.flag = FALSE, s.flag = FALSE
+                DELETE r1
+                RETURN s;
                 """;
         var result = driver.executableQuery(query)
                 .withParameters(Map.of("id", id.toString()))
@@ -152,8 +150,7 @@ public class ShelfService {
                     node.get("flag").asBoolean()
             );
         }).findFirst().orElse(null);
-
         if (shelf1 == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(shelf1);
+        return ResponseEntity.ok().build();
     }
 }

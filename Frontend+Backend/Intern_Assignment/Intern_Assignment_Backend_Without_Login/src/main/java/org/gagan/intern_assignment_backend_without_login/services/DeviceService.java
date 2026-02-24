@@ -63,6 +63,7 @@ public class DeviceService {
                 ))
                 .withConfig(QueryConfig.builder().withDatabase("neo4j").build())
                 .execute();
+        log.info("Error while creating shelf: {}", device);
         return ResponseEntity.ok(device);
     }
 
