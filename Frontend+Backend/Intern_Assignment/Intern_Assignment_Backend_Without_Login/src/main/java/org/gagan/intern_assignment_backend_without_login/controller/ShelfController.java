@@ -29,7 +29,7 @@ public class ShelfController {
         return selfService.createShelf(shelf,shelfPositionId,deviceId);
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<Shelf> updateShelf(@PathVariable String id,Shelf shelf){
+    public ResponseEntity<Shelf> updateShelf(@PathVariable String id, @RequestBody Shelf shelf){
         return selfService.updateShelf(UUID.fromString(id),shelf);
     }
     @GetMapping

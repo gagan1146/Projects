@@ -28,7 +28,7 @@ public class DeviceService {
 
     public ResponseEntity<Device> createDevice(Device device) {
         List<Map<String, Object>> shelves = new ArrayList<>();
-
+        UUID id = randomUUID();
         for (int i = 1; i <= device.getNumberOfShelfPositions(); i++) {
             Map<String, Object> shelfPositions = new HashMap<>();
             shelfPositions.put("shelfPositionId", randomUUID().toString());
@@ -37,23 +37,23 @@ public class DeviceService {
         }
 
         var result = driver.executableQuery("""
-        CREATE (d:Device {
-            deviceId: $deviceId,
-            deviceName: $deviceName,
-            partNumber: $partNumber,
-            buildingName: $buildingName,
-            deviceType: $deviceType,
-            numberOfShelfPositions: $numberOfShelfPositions,
-            flag: true
-        })
-        WITH d, $shelves AS shelves
-        UNWIND shelves AS shelf
-        CREATE (s:ShelfPositions {shelfPositionId: shelf.shelfPositionId, flag: shelf.flag, deviceId:d.deviceId})
-        CREATE (d)-[:HAS]->(s)
-        RETURN d, collect(s) AS shelves
-        """)
+                        CREATE (d:Device {
+                            deviceId: $deviceId,
+                            deviceName: $deviceName,
+                            partNumber: $partNumber,
+                            buildingName: $buildingName,
+                            deviceType: $deviceType,
+                            numberOfShelfPositions: $numberOfShelfPositions,
+                            flag: true
+                        })
+                        WITH d, $shelves AS shelves
+                        UNWIND shelves AS shelf
+                        CREATE (s:ShelfPositions {shelfPositionId: shelf.shelfPositionId, flag: shelf.flag, deviceId:d.deviceId})
+                        CREATE (d)-[:HAS]->(s)
+                        RETURN d, collect(s) AS shelves
+                        """)
                 .withParameters(Map.of(
-                        "deviceId", randomUUID().toString(),
+                        "deviceId", id.toString(),
                         "deviceName", device.getDeviceName(),
                         "partNumber", device.getPartNumber(),
                         "buildingName", device.getBuildingName(),
@@ -63,6 +63,7 @@ public class DeviceService {
                 ))
                 .withConfig(QueryConfig.builder().withDatabase("neo4j").build())
                 .execute();
+        device.setDeviceId(id);
         log.info("Error while creating shelf: {}", device);
         return ResponseEntity.ok(device);
     }
@@ -74,7 +75,7 @@ public class DeviceService {
                 .withConfig(QueryConfig.builder().withDatabase("neo4j").build()).execute();
         var devices = result.records().stream().map(r -> {
             var node = r.get("d").asNode();
-            return new Device(UUID.fromString(node.get("deviceId").asString()), node.get("deviceName").asString(), node.get("partNumber").asString(), node.get("buildingName").asString(), node.get("deviceType").asString(), node.get("numberOfShelfPositions").asInt(),true);
+            return new Device(UUID.fromString(node.get("deviceId").asString()), node.get("deviceName").asString(), node.get("partNumber").asString(), node.get("buildingName").asString(), node.get("deviceType").asString(), node.get("numberOfShelfPositions").asInt(), true);
         }).collect(Collectors.toList());
         return ResponseEntity.ok(devices);
     }
@@ -110,21 +111,32 @@ public class DeviceService {
         if (result.records().isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        updatedDevice.setDeviceId(id);
         return ResponseEntity.ok(updatedDevice);
     }
 
     public ResponseEntity<Void> deleteDevice(UUID id) {
-        driver.executableQuery("""
-                        MATCH (d:Device {deviceId: $id})-[r:HAS]->(sp:ShelfPositions)
+        var result = driver.executableQuery("""
+                        OPTIONAL MATCH (d:Device {deviceId: $id, flag: TRUE})-[r:HAS]->(sp:ShelfPositions)
                         OPTIONAL MATCH (sp)-[r1:HAS]->(s:Shelf)
-                        WITH r1, d, sp, s
+                        WITH d, sp, s, r1
                         SET d.flag = false, sp.flag = false, s.flag = false
                         DELETE r1
-                """).withParameters(Map.of("id", id.toString()))
-                .withConfig(QueryConfig.builder()
-                        .withDatabase("neo4j")
-                        .build())
+                        RETURN COUNT(d) AS deletedCount
+                        """)
+                .withParameters(Map.of("id", id.toString()))
+                .withConfig(QueryConfig.builder().withDatabase("neo4j").build())
                 .execute();
-        return ResponseEntity.ok().build();
+
+        var deletedCount = result.records().stream()
+                .map(r -> r.get("deletedCount").asInt())
+                .findFirst()
+                .orElse(0);
+
+        if (deletedCount == 0) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
     }
+
 }
