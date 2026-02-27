@@ -36,7 +36,7 @@ public class DeviceService {
             shelves.add(shelfPositions);
         }
 
-        var result = driver.executableQuery("""
+        driver.executableQuery("""
                         CREATE (d:Device {
                             deviceId: $deviceId,
                             deviceName: $deviceName,
@@ -138,5 +138,4 @@ public class DeviceService {
         }
         return ResponseEntity.noContent().build();
     }
-
 }

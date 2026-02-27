@@ -3,6 +3,7 @@ package org.gagan.intern_assignment_backend_without_login.services;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.gagan.intern_assignment_backend_without_login.dto.ShelfPositionsOnly;
 import org.gagan.intern_assignment_backend_without_login.dto.ShelfWithShelfPosition;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.QueryConfig;
@@ -17,16 +18,17 @@ import java.util.UUID;
 @Service
 public class ShelfPositionService {
     private final Driver driver;
+
     public ShelfPositionService(Driver driver) {
         this.driver = driver;
     }
 
     public ResponseEntity<List<ShelfWithShelfPosition>> getAllShelfPositions(UUID deviceId) {
         String query = """
-            MATCH (n:Device {deviceId:$deviceId, flag:TRUE})-[:HAS]->(sp:ShelfPositions)
-            OPTIONAL MATCH (sp)-[:HAS]->(s:Shelf {flag:TRUE} )
-            RETURN sp.shelfPositionId AS shelfPositionId, s.shelfName AS shelfName
-            """;
+                MATCH (n:Device {deviceId:$deviceId, flag:TRUE})-[:HAS]->(sp:ShelfPositions)
+                OPTIONAL MATCH (sp)-[:HAS]->(s:Shelf {flag:TRUE} )
+                RETURN sp.shelfPositionId AS shelfPositionId, s.shelfName AS shelfName
+                """;
 
         var result = driver.executableQuery(query)
                 .withParameters(Map.of("deviceId", deviceId.toString()))
@@ -43,4 +45,25 @@ public class ShelfPositionService {
         log.info("Shelf Position : {}", deviceId);
         return ResponseEntity.ok(shelves);
     }
+
+    public ResponseEntity<List<ShelfPositionsOnly>> getListOfAllShelfPositions() {
+        String query = """
+        OPTIONAL MATCH (sp:ShelfPositions {flag:TRUE})-[:HAS]->(s:Shelf {flag:TRUE})
+        WHERE s IS NULL
+        RETURN sp.shelfPositionId AS shelfPositionId
+        """;
+
+        var result = driver.executableQuery(query)
+                .withConfig(QueryConfig.builder().withDatabase("neo4j").build())
+                .execute();
+
+        List<ShelfPositionsOnly> shelves = result.records().stream()
+                .map(r -> new ShelfPositionsOnly(
+                        UUID.fromString(r.get("shelfPositionId").asString())
+                ))
+                .toList();
+
+        return ResponseEntity.ok(shelves);
+    }
+
 }

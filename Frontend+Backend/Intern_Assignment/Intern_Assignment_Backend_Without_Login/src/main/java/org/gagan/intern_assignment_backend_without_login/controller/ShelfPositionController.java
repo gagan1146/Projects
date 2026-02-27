@@ -1,5 +1,6 @@
 package org.gagan.intern_assignment_backend_without_login.controller;
 
+import org.gagan.intern_assignment_backend_without_login.dto.ShelfPositionsOnly;
 import org.gagan.intern_assignment_backend_without_login.dto.ShelfWithShelfPosition;
 import org.gagan.intern_assignment_backend_without_login.services.ShelfPositionService;
 import org.springframework.http.ResponseEntity;
@@ -22,5 +23,10 @@ public class ShelfPositionController {
     @GetMapping("/{deviceId}")
     public ResponseEntity<List<ShelfWithShelfPosition>> getAllShelfPositions(@PathVariable UUID deviceId){
         return shelfPositionService.getAllShelfPositions(deviceId);
+    }
+
+    @GetMapping("/shelfPositionIds")
+    public ResponseEntity<List<ShelfPositionsOnly>> getListOfAllShelfPositions() {
+        return shelfPositionService.getListOfAllShelfPositions();
     }
 }
