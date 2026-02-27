@@ -1,30 +1,31 @@
-# Use a lightweight JDK image for building
-FROM eclipse-temurin:17-jdk AS build
 
-# Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY src .
+file for Maven +
+COPY pom.xml .
+dockerfile
+# Stage
+FROM eclipse-temurin:17-jdk AS build# Copy Maven wrapper and pom.xml firstCOPY mvnw .
+COPY mvnw.cmd .
+COPY .mvn .mvn
 
-# If using Maven:
-RUN ./mvnw clean package -DskipTests
+# Downloadaches layers)
+RUN dependencies (c ./mvnw dependency:go-offline
 
-# If using Gradle (uncomment instead):
-# RUN ./gradlew clean build -x test
+# Copy the source code
+COPY src src
 
-# Use a smaller JRE image for running
-FROM eclipse-temurin:17-jre
+# Build the application
+RUN ./mvnw clean
+FROM eclipse-tem package -DskipTestsurin:17-jre
 
-# Set working directory
 WORKDIR /app
 
 # Copy the built JAR from the build stage
-COPY --from=build /app/target/*.jar app.jar
-# If Gradle, use /app/build/libs/*.jar instead
+COPY --from=build /app/target/*.jar
 
-# Expose port (default Spring Boot port)
+# Stage 2: Run the application app.jar
+
 EXPOSE 8080
 
-# Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
