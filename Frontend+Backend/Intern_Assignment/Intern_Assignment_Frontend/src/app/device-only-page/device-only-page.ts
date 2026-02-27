@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DeviceService } from '../service/device-service';
 import { DeviceModel } from '../models/DeviceModel';
 import { FormsModule } from '@angular/forms';
@@ -21,7 +21,8 @@ export class DeviceOnlyPage implements OnInit {
     private httpClient: HttpClient,
     private deviceService: DeviceService,
     private route: ActivatedRoute,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -44,13 +45,14 @@ export class DeviceOnlyPage implements OnInit {
 
   fxnCalled(): void {
     if (!this.device || this.device.buildingName === '' || this.device.deviceName === '') {
-      console.warn('Device data is incomplete, update aborted.');
+      alert('Device data is incomplete, update aborted.');
       return;
     }
 
     this.deviceService.updateDevice(this.device.deviceId, this.device).subscribe({
       next: (updated) => {
-        console.log('Updated device:', updated);
+        alert(`Updated device:', ${updated}`);
+        this.router.navigate(["/device/summary"]);
       },
       error: (err) => {
         console.error('Failed to update device', err);

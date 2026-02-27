@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DeviceModel } from '../models/DeviceModel';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { DeviceOnlyIds } from '../models/DeviceOnlyIds';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,8 @@ export class DeviceService {
     return this.httpClient.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  
+
   device = { 
     deviceName: '', 
     partNumber: '', 
@@ -37,4 +40,6 @@ export class DeviceService {
     numberOfShelfPositions: 0,
     flag:true
   };
+
+  
 }

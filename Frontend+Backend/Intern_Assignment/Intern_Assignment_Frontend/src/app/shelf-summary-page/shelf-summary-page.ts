@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ShelfService } from '../service/shelf-service';
 import { ShelfModel } from '../models/ShelfModel';
 import { ShelfWithDeviceAndShelfPosition } from '../models/ShelfWithDeviceAndShelfPosition';
@@ -23,7 +23,7 @@ export class ShelfSummaryPage implements OnInit,OnChanges {
     'Actions',
   ];
   shelves: ShelfWithDeviceAndShelfPosition[] = [];
-  constructor(private shelfService: ShelfService, private cdRef: ChangeDetectorRef) {}
+  constructor(private shelfService: ShelfService, private cdRef: ChangeDetectorRef, private router : Router) {}
   ngOnInit(): void {
     this.loadShelves();
   }
@@ -44,10 +44,13 @@ export class ShelfSummaryPage implements OnInit,OnChanges {
     });
   }
   deleteShelfById(id:string){
+    console.log(id, typeof id);
+    
     this.shelfService.deleteShelfById(id).subscribe({
       next:
       (data)=>{
-        console.log(data);
+        alert(`Data deleted:`);
+        this.router.navigate(['/route/summary']);
       },
       error:
       (error)=>{

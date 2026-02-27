@@ -1,7 +1,7 @@
 import { Component, OnChanges, OnInit, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ShelfService } from '../service/shelf-service';
 import { ShelfModel } from '../models/ShelfModel';
 
@@ -28,6 +28,7 @@ export class ShelfOnlyPage implements OnInit, OnChanges {
     private shelfService: ShelfService,
     private route: ActivatedRoute,
     private cdRef: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -56,6 +57,8 @@ export class ShelfOnlyPage implements OnInit, OnChanges {
   }
 
   updateShelf(): void {
+    console.log(this.shelfId,this.shelf);
+    
     if (!this.shelf.shelfName || !this.shelf.partNumber) {
       console.warn('Form is incomplete, update aborted.');
       return;
@@ -65,6 +68,7 @@ export class ShelfOnlyPage implements OnInit, OnChanges {
         next: (data) => {
           console.log('Shelf updated successfully:', data);
           alert('Shelf updated successfully!');
+          this.router.navigate(['/shelf/summary']);
         },
         error: (error) => {
           console.error(error);

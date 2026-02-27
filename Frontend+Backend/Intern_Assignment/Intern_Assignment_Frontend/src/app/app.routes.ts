@@ -9,6 +9,9 @@ import { LoginComponent } from './login/login';
 import { SignupComponent } from './signup/signup';
 import { DeviceOnlyPage } from './device-only-page/device-only-page';
 import { ShelfOnlyPage } from './shelf-only-page/shelf-only-page';
+import { RoutingPage } from './routing-page/routing-page';
+import { AddShelvesToDevice } from './add-shelves-to-device/add-shelves-to-device';
+import { ShelfCreationByDevice } from './shelf-creation-by-device/shelf-creation-by-device';
 
 export const routes: Routes = [
     {path:'',component:LandingPage},
@@ -19,6 +22,8 @@ export const routes: Routes = [
     {path:'shelf/creation/:deviceId/:shelfPositionId',component:ShelfCreationPage},
     {path:'shelf/updation/:shelfPositionId',component:ShelfOnlyPage},
     {path:'shelf/summary',component:ShelfSummaryPage},
+    {path:'shelf/creation/byDevice',component:ShelfCreationByDevice},
+    {path:'route/summary',component:RoutingPage},
     {path:"device/summary/device/:deviceId",component:DeviceOnlyPage},
     {path:'**',component:PageNotFoundPage}
 

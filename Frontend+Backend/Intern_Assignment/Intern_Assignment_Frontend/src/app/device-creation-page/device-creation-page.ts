@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DeviceModel } from '../models/DeviceModel';
 import { DeviceService } from '../service/device-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-device-creation-page',
@@ -13,7 +14,7 @@ import { DeviceService } from '../service/device-service';
   styleUrls: ['./device-creation-page.css']
 })
 export class DeviceCreationPage {
-  constructor(private httpClient: HttpClient, private deviceService:DeviceService) {}
+  constructor(private httpClient: HttpClient, private deviceService:DeviceService, private router: Router) {}
 
   device = { 
     deviceName: '', 
@@ -32,7 +33,8 @@ export class DeviceCreationPage {
     
     this.httpClient.post('http://localhost:8080/api/devices/create', this.device)
       .subscribe(data => {
-        console.log('Created device:', data);
+        alert('Created device');
+        this.router.navigate(["/device/summary"]);
       });
   }
 }

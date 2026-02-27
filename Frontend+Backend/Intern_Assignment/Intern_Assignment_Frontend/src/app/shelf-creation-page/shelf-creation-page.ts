@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ShelfService } from '../service/shelf-service';
 import { HttpClient } from '@angular/common/http';
+import { ShelfModel } from '../models/ShelfModel';
 
 @Component({
   selector: 'app-shelf-creation-page',
@@ -19,14 +20,18 @@ export class ShelfCreationPage {
     private shelfService: ShelfService,
     private route: ActivatedRoute,
     private httpClient: HttpClient,
+    private router: Router
   ) {}
-  shelf: {
-    shelfName: string;
-    partNumber: string;
-  } = { shelfName: '', partNumber: '' };
+  shelf: ShelfModel = {
+    shelfId:"",
+    shelfName:"",
+    partNumber:"",
+    flag:true
+  }
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('deviceId')!;
     this.shelfPositionId = this.route.snapshot.paramMap.get('shelfPositionId')!;
+    this.shelf.shelfId = this.id;
   }
   createShelf() {
     console.log('Shelf added:', this.shelf);
@@ -40,8 +45,8 @@ export class ShelfCreationPage {
         )
         .subscribe({
           next: (data) => {
-            console.log('Shelf Added Successfully...');
-            console.log(data);
+            alert('Shelf Added Successfully...');
+            this.router.navigate(["/shelf/summary"]);
           },
           error: (error) => {
             alert(`Error Occurred: ${error}`);

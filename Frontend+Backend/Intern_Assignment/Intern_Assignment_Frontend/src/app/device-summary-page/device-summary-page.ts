@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, SimpleChanges, OnChanges } from "@angular/core";
 import { DeviceModel } from "../models/DeviceModel";
 import { DeviceService } from "../service/device-service";
-import { RouterModule } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 
@@ -24,7 +24,7 @@ export class DeviceSummaryPage implements OnInit, OnChanges {
     'Actions',
   ];
 
-  constructor(private deviceService: DeviceService, private cdRef: ChangeDetectorRef) {}
+  constructor(private deviceService: DeviceService, private cdRef: ChangeDetectorRef, private router: Router) {}
 
   ngOnInit(): void {
     this.loadDevices();
@@ -38,7 +38,6 @@ export class DeviceSummaryPage implements OnInit, OnChanges {
     this.deviceService.getAllDevices().subscribe({
       next: (data) => {
         this.devices = data;
-        console.log('Devices loaded in summary page:', data);
         this.cdRef.detectChanges();
       },
       error: (err) => {
@@ -51,7 +50,8 @@ export class DeviceSummaryPage implements OnInit, OnChanges {
     this.deviceService.deleteDevice(id).subscribe({
       next: () => {
         this.devices = this.devices.filter(d => d.deviceId !== id);
-        console.log(`Device ${id} deleted`);
+        alert(`Device ${id} deleted`);
+        this.router.navigate(["/device/summary"]);
         this.cdRef.detectChanges();
       },
       error: (err) => {
