@@ -19,14 +19,16 @@ import { ShelfPosiiton } from '../service/shelf-posiiton';
 export class ShelfCreationByDevice implements OnInit,OnChanges {
   id!: string;
   shelfPositionId!: string;
-  deviceOnlyIds: DeviceOnlyIds[] = [ { shelfPositonId: "" } ]; 
+  deviceOnlyIds: DeviceOnlyIds[] = []; 
+  deviceAndShelfPositionIds: DeviceOnlyIds[] = [];
   constructor(
     private shelfService: ShelfService,
     private route: ActivatedRoute,
     private router: Router,
     private deviceService: DeviceService,
     private cdRef:ChangeDetectorRef,
-    private shelfPositionService:ShelfPosiiton
+    private shelfPositionService:ShelfPosiiton,
+    private httpClient: HttpClient
   ) {}
   shelf: ShelfModel = {
     shelfId:"",
@@ -45,9 +47,9 @@ export class ShelfCreationByDevice implements OnInit,OnChanges {
   getAllShelf(): void {
     this.shelfPositionService.getAddDevicesById().subscribe({
       next: (data) => {
+        this.deviceAndShelfPositionIds = data;
         this.shelfPositionService.deviceAndShelfPositionIds = data;
         console.log(data);
-        
         this.cdRef.detectChanges();
       },
       error: (err) => {
@@ -56,6 +58,29 @@ export class ShelfCreationByDevice implements OnInit,OnChanges {
     });
   }
   createShelf() {
-    // shelvePositions = this.httpClient.get()
+    if(this.shelfPositionId === undefined){
+      alert(`Select the ShelfPositionId...`);
+    }
+    else{
+      console.log('Shelf added:', this.shelf);
+      console.log(this.shelfPositionId);
+      
+      if (this.shelf.partNumber == '' || this.shelf.shelfName == '') {
+        alert('Complete the details');
+      } else {
+        this.httpClient.post( `http://localhost:8080/api/shelf/create/${this.shelfPositionId}`,
+          this.shelf,
+        )
+        .subscribe({
+          next: (data) => {
+            alert('Shelf Added Successfully...');
+            this.router.navigate(["/shelf/summary"]);
+          },
+          error: (error) => {
+            alert(`Error Occurred: ${error}`);
+          },
+        });
+      }
+    }
   }
 }

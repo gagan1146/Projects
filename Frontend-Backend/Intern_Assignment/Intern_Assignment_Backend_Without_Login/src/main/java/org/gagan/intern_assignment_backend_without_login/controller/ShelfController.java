@@ -28,6 +28,11 @@ public class ShelfController {
                                              @PathVariable  UUID deviceId) {
         return selfService.createShelf(shelf,shelfPositionId,deviceId);
     }
+    @PostMapping("/create/{shelfPositionId}")
+    public ResponseEntity<Shelf> createShelfUsingOnlyShelfPositionId(@RequestBody Shelf shelf,
+                                             @PathVariable String shelfPositionId) {
+        return selfService.createShelfUsingOnlyShelfPositionId(shelf, UUID.fromString(shelfPositionId));
+    }
     @PutMapping("/update/{id}")
     public ResponseEntity<Shelf> updateShelf(@PathVariable String id, @RequestBody Shelf shelf){
         return selfService.updateShelf(UUID.fromString(id),shelf);

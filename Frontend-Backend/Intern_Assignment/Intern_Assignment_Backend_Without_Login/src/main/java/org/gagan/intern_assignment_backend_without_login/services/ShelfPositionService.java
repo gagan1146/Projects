@@ -48,8 +48,7 @@ public class ShelfPositionService {
 
     public ResponseEntity<List<ShelfPositionsOnly>> getListOfAllShelfPositions() {
         String query = """
-        OPTIONAL MATCH (sp:ShelfPositions {flag:TRUE})-[:HAS]->(s:Shelf {flag:TRUE})
-        WHERE s IS NULL
+        MATCH( d:Device { flag : TRUE } )-[:HAS]->( sp:ShelfPositions { flag: FALSE } )
         RETURN sp.shelfPositionId AS shelfPositionId
         """;
 

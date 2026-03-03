@@ -45,7 +45,29 @@ public class ShelfService {
                 .execute();
         shelf.setShelfId(id);
         log.info("Shelf created: {}", shelf);
+        return ResponseEntity.ok(shelf);
+    }
 
+    public ResponseEntity<Shelf> createShelfUsingOnlyShelfPositionId(Shelf shelf, UUID shelfPositionId) {
+        UUID id = randomUUID();
+        var query = """
+                CREATE (s:Shelf { shelfId: $id, shelfName: $shelfName, partNumber: $partNumber, flag:true })
+                WITH s
+                MATCH (sp:ShelfPositions { shelfPositionId : $shelfPositionId, flag : FALSE })
+                SET sp.flag = TRUE
+                CREATE (sp)-[:HAS]->(s)
+                RETURN s
+                """;
+        driver.executableQuery(query)
+                .withParameters(Map.of("id",id.toString(),"shelfName", shelf.getShelfName(), "partNumber", shelf.getPartNumber(),
+                        "shelfPositionId", shelfPositionId.toString()
+                ))
+                .withConfig(QueryConfig.builder()
+                        .withDatabase("neo4j")
+                        .build())
+                .execute();
+        shelf.setShelfId(id);
+        log.info("Shelf created : {}", shelf);
         return ResponseEntity.ok(shelf);
     }
 
