@@ -34,7 +34,7 @@ public class ShelfService {
                 CREATE (sp)-[:HAS]->(s)
                 RETURN s
                 """;
-        var result = driver.executableQuery(query)
+        driver.executableQuery(query)
                 .withParameters(Map.of("id",id.toString(),"shelfName", shelf.getShelfName(), "partNumber", shelf.getPartNumber(),
                         "deviceId", deviceId.toString(),
                         "shelfPositionId", shelfPositionId.toString()
@@ -166,7 +166,7 @@ public class ShelfService {
                 node.get("partNumber").asString(),
                 node.get("flag").asBoolean()
         );
-        log.info("Shelf Deleted..." + shelf1);
+        log.info("Shelf Deleted...{}", shelf1);
         return ResponseEntity.ok(shelf1);
     }
 }
