@@ -7,7 +7,6 @@ import org.gagan.routematic_clone.dto.signupDTO.UserSignupResponse;
 import org.gagan.routematic_clone.model.User;
 import org.gagan.routematic_clone.repository.UserRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ public class UserService {
     private final ModelMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public UserService(UserRepository userRepository, ModelMapper mapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.mapper = mapper;

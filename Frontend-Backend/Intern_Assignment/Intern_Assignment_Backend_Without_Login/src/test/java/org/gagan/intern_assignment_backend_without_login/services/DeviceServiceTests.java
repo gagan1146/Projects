@@ -2,6 +2,7 @@ package org.gagan.intern_assignment_backend_without_login.services;
 
 import org.gagan.intern_assignment_backend_without_login.entity.Device;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,6 +52,7 @@ public class DeviceServiceTests {
     }
 
     @Nested
+    @DisplayName("Creating a Device")
     class CreateDevice {
         static Stream<Device> deviceProvider() {
             return Stream.of(
@@ -62,6 +64,7 @@ public class DeviceServiceTests {
 
         @ParameterizedTest
         @MethodSource("deviceProvider")
+        @DisplayName("Device Created Successfully")
         void deviceCreatedSuccessfully(Device device) {
             ResponseEntity<Device> response = deviceService.createDevice(device);
             assertNotNull(response);
@@ -70,6 +73,7 @@ public class DeviceServiceTests {
     }
 
     @Nested
+    @DisplayName("Get List of all Devices")
     class GetListOfAllDevices {
         @Test
         void getListOfAllDevices() {
@@ -84,12 +88,14 @@ public class DeviceServiceTests {
             "af81b604-7488-44d8-8228-e9c32c1292ec",
             "00000000-0000-0000-0000-000000000000"
     })
+    @DisplayName("Finding device by Id")
     void testFindDeviceById(String id) {
         ResponseEntity<Device> response = deviceService.getDeviceById(UUID.fromString(id));
         assertEquals(404, response.getStatusCode().value());
     }
 
     @Test
+    @DisplayName("Get All Devices")
     void testGetAllDevices() {
         ResponseEntity<List<Device>> response = deviceService.getAllDevices();
         assertNotNull(response);
@@ -101,6 +107,7 @@ public class DeviceServiceTests {
             "af81b604-7488-44d8-8228-e9c32c1292ec",
             "00000000-0000-0000-0000-000000000000"
     })
+    @DisplayName("Soft Deleting a Device By Id")
     void testDeleteDevice(String id) {
         ResponseEntity<Void> response = deviceService.deleteDevice(UUID.fromString(id));
         assertEquals(404, response.getStatusCode().value());

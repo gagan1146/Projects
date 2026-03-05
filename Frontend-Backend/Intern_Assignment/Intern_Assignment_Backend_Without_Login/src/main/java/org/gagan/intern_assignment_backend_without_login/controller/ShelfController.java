@@ -2,8 +2,10 @@ package org.gagan.intern_assignment_backend_without_login.controller;
 
 import org.gagan.intern_assignment_backend_without_login.dto.ShelfWithDeviceAndShelfPosition;
 import org.gagan.intern_assignment_backend_without_login.entity.Shelf;
+import org.gagan.intern_assignment_backend_without_login.exception.CustomException;
 import org.gagan.intern_assignment_backend_without_login.services.ShelfService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +33,7 @@ public class ShelfController {
     @PostMapping("/create/{shelfPositionId}")
     public ResponseEntity<Shelf> createShelfUsingOnlyShelfPositionId(@RequestBody Shelf shelf,
                                              @PathVariable String shelfPositionId) {
+        if(shelfPositionId == "" || shelfPositionId==null) throw new CustomException("ShelfPosition id is not defined..", HttpStatus.NOT_ACCEPTABLE);
         return selfService.createShelfUsingOnlyShelfPositionId(shelf, UUID.fromString(shelfPositionId));
     }
     @PutMapping("/update/{id}")

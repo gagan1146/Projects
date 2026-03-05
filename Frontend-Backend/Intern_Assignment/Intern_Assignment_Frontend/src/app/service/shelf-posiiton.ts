@@ -12,7 +12,7 @@ import { DeviceOnlyIds } from '../models/DeviceOnlyIds';
 export class ShelfPosiiton {
 
   deviceAndShelfPositionIds : DeviceOnlyIds[]  = [{
-    shelfPositonId: ""
+    shelfPositionId: ""
   }];
   private apiUrl = 'http://localhost:8080/api/shelfPosition';
   constructor(private httpClient: HttpClient) {}

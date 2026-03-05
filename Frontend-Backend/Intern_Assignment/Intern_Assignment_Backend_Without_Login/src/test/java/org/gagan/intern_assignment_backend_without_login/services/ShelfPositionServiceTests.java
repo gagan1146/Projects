@@ -2,6 +2,7 @@ package org.gagan.intern_assignment_backend_without_login.services;
 
 import org.gagan.intern_assignment_backend_without_login.dto.ShelfWithShelfPosition;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +25,7 @@ import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Shelf Position Service Tests Here..")
 class ShelfPositionServiceTests {
 
     @Mock
@@ -31,8 +33,6 @@ class ShelfPositionServiceTests {
 
     @Mock
     private ExecutableQuery executableQuery;
-
-
 
     @Mock
     private EagerResult eagerResult;
@@ -49,6 +49,7 @@ class ShelfPositionServiceTests {
 
 
     @Test
+    @DisplayName("Get All Shelf Positions returning List")
     void getAllShelfPositions_shouldReturnList() {
         Record record = mock(Record.class);
         Value shelfPositionValue = mock(Value.class);
@@ -83,6 +84,7 @@ class ShelfPositionServiceTests {
 
 
     @Test
+    @DisplayName("Get All Shelf Positions Returning Empty List...")
     void getAllShelfPositions_shouldReturnEmptyList() {
         when(driver.executableQuery(any(String.class))).thenReturn(executableQuery);
         when(executableQuery.withParameters(anyMap())).thenReturn(executableQuery);

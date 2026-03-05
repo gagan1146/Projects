@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.gagan.intern_assignment_backend_without_login.dto.ShelfPositionsOnly;
 import org.gagan.intern_assignment_backend_without_login.dto.ShelfWithShelfPosition;
+import org.gagan.intern_assignment_backend_without_login.exception.CustomException;
 import org.neo4j.driver.Driver;
 import org.neo4j.driver.QueryConfig;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -29,40 +31,49 @@ public class ShelfPositionService {
                 OPTIONAL MATCH (sp)-[:HAS]->(s:Shelf {flag:TRUE} )
                 RETURN sp.shelfPositionId AS shelfPositionId, s.shelfName AS shelfName
                 """;
+        try {
 
-        var result = driver.executableQuery(query)
-                .withParameters(Map.of("deviceId", deviceId.toString()))
-                .withConfig(QueryConfig.builder().withDatabase("neo4j").build())
-                .execute();
 
-        List<ShelfWithShelfPosition> shelves = result.records().stream()
-                .map(r -> new ShelfWithShelfPosition(
+            var result = driver.executableQuery(query)
+                    .withParameters(Map.of("deviceId", deviceId.toString()))
+                    .withConfig(QueryConfig.builder().withDatabase("neo4j").build())
+                    .execute();
 
-                        UUID.fromString(r.get("shelfPositionId").asString()),
-                        r.get("shelfName").isNull() ? null : r.get("shelfName").asString()
-                ))
-                .toList();
-        log.info("Shelf Position : {}", deviceId);
-        return ResponseEntity.ok(shelves);
+            List<ShelfWithShelfPosition> shelves = result.records().stream()
+                    .map(r -> new ShelfWithShelfPosition(
+
+                            UUID.fromString(r.get("shelfPositionId").asString()),
+                            r.get("shelfName").isNull() ? null : r.get("shelfName").asString()
+                    ))
+                    .toList();
+            log.info("Shelf Position : {}", deviceId);
+            return ResponseEntity.ok(shelves);
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage(), HttpStatus.BAD_GATEWAY);
+        }
     }
 
     public ResponseEntity<List<ShelfPositionsOnly>> getListOfAllShelfPositions() {
         String query = """
-        MATCH( d:Device { flag : TRUE } )-[:HAS]->( sp:ShelfPositions { flag: FALSE } )
-        RETURN sp.shelfPositionId AS shelfPositionId
-        """;
+                MATCH( d:Device { flag : TRUE } )-[:HAS]->( sp:ShelfPositions { flag: FALSE } )
+                RETURN sp.shelfPositionId AS shelfPositionId
+                """;
+        try {
 
-        var result = driver.executableQuery(query)
-                .withConfig(QueryConfig.builder().withDatabase("neo4j").build())
-                .execute();
+            var result = driver.executableQuery(query)
+                    .withConfig(QueryConfig.builder().withDatabase("neo4j").build())
+                    .execute();
 
-        List<ShelfPositionsOnly> shelves = result.records().stream()
-                .map(r -> new ShelfPositionsOnly(
-                        UUID.fromString(r.get("shelfPositionId").asString())
-                ))
-                .toList();
+            List<ShelfPositionsOnly> shelves = result.records().stream()
+                    .map(r -> new ShelfPositionsOnly(
+                            UUID.fromString(r.get("shelfPositionId").asString())
+                    ))
+                    .toList();
 
-        return ResponseEntity.ok(shelves);
+            return ResponseEntity.ok(shelves);
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage(), HttpStatus.BAD_GATEWAY);
+        }
     }
 
 }

@@ -1,3 +1,3 @@
 export interface DeviceOnlyIds {
-    shelfPositonId: string
+    shelfPositionId: string
 }
